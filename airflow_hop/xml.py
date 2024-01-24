@@ -19,7 +19,7 @@ import json
 from xml.etree import ElementTree
 from xml.etree.ElementTree import Element
 
-from airflow import AirflowException
+from airflow.exceptions import AirflowException
 
 class XMLBuilder:
     """
