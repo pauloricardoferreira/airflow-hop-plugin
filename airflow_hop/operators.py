@@ -53,20 +53,26 @@ class HopWorkflowOperator(HopBaseOperator):
 
     def __init__(self,
                  workflow,
+                 project_path,
                  project_name,
                  log_level,
                  *args,
+                 environment_path,
                  environment=None,
+                 hop_config_path,
                  params=None,
                  hop_conn_id='hop_default',
                  **kwargs):
         super().__init__(*args, **kwargs)
         self.workflow = workflow
+        self.project_path = project_path
         self.project_name = project_name
         self.log_level = log_level
         self.task_params = params
         self.hop_conn_id = hop_conn_id
+        self.environment_path = environment_path
         self.environment = environment
+        self.hop_config_path = hop_config_path
 
     def __get_hop_client(self):
         return HopHook(
