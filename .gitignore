@@ -130,3 +130,5 @@ dmypy.json
 
 # Docker folder
 docker_files/
+
+teste_dag.py
