@@ -50,20 +50,16 @@ class HopHook(BaseHook):
                 username,
                 password,
                 log_level,
-                project_path, # Project Folder 
+                hop_home,
                 project_name,
-                environment_path, #Environments Folder,
-                environment, #Hop Config Folder
-                hop_config_path
-                ):
+                environment):
             self.host = host
             self.port = port
             self.username = username
             self.password = password
             self.log_level = log_level
-            self.project_path=project_path
+            self.hop_home = hop_home
             self.project_name = project_name
-            self.environment_path=environment_path
             self.environment = environment
 
         def __get_url(self, endpoint):
@@ -74,12 +70,10 @@ class HopHook(BaseHook):
 
         def register_pipeline(self, pipe_name, pipe_config, task_params=None):
             xml_builder = XMLBuilder(
-                self.project_path,
+                self.hop_home,
                 self.project_name,
                 task_params,
-                self.environment_path,
-                self.environment,
-                self.hop_config_path)
+                self.environment)
             data = xml_builder.get_pipeline_xml(pipe_name, pipe_config)
             parameters = {'xml': 'Y'}
             response = requests.post(url=self.__get_url(self.REGISTER_PIPELINE),
@@ -163,12 +157,10 @@ class HopHook(BaseHook):
 
         def register_workflow(self, workflow_name, task_params=None):
             xml_builder = XMLBuilder(
-                self.project_path,
+                self.hop_home,
                 self.project_name,
                 task_params,
-                self.environment_path,
-                self.environment,
-                self.hop_config_path)
+                self.environment)
             data = xml_builder.get_workflow_xml(workflow_name)
             parameters = {'xml': 'Y'}
             response = requests.post(url=self.__get_url(self.REGISTER_WORKFLOW),
@@ -265,9 +257,7 @@ class HopHook(BaseHook):
             username=self.connection.login,
             password=self.connection.password,
             log_level=self.log_level,
-            project_path=self.project_path,
+            hop_home=self.extras.get('hop_home'),
             project_name=self.project_name,
-            environment_path=self.environment_path,
-            environment=self.environment,
-            hop_config_path=self.hop_config_path)
+            environment=self.environment)
         return self.hop_client

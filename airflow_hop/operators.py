@@ -17,7 +17,7 @@ import re
 import zlib
 import time
 from typing import Any
-from airflow.exceptions import AirflowException
+from airflow import AirflowException
 
 from airflow.models import BaseOperator
 from airflow.utils.context import Context
@@ -53,34 +53,25 @@ class HopWorkflowOperator(HopBaseOperator):
 
     def __init__(self,
                  workflow,
-                 project_path,
                  project_name,
                  log_level,
                  *args,
-                 environment_path,
                  environment=None,
-                 hop_config_path,
                  params=None,
                  hop_conn_id='hop_default',
                  **kwargs):
         super().__init__(*args, **kwargs)
         self.workflow = workflow
-        self.project_path = project_path
         self.project_name = project_name
         self.log_level = log_level
         self.task_params = params
         self.hop_conn_id = hop_conn_id
-        self.environment_path=environment_path
         self.environment = environment
-        self.hop_config_path = hop_config_path
 
     def __get_hop_client(self):
         return HopHook(
-                self.project_path,
                 self.project_name,
-                self.environment_path,
                 self.environment,
-                self.hop_config_path,
                 self.hop_conn_id,
                 self.log_level).get_conn()
 
@@ -125,35 +116,26 @@ class HopPipelineOperator(HopBaseOperator):
     def __init__(self,
                  pipeline,
                  pipe_config,
-                 project_path,
                  project_name,
                  log_level,
                  *args,
-                 environment_path,
                  environment=None,
-                 hop_config_path,
                  params=None,
                  hop_conn_id='hop_default',
                  **kwargs):
         super().__init__(*args, **kwargs)
         self.pipeline = pipeline
         self.pipe_config = pipe_config
-        self.project_path = project_path
         self.project_name = project_name
         self.log_level = log_level
         self.hop_conn_id = hop_conn_id
         self.task_params = params
-        self.environment_path = environment_path
         self.environment = environment
-        self.hop_config_path = hop_config_path
 
     def __get_hop_client(self):
         return HopHook(
-                self.project_path,
                 self.project_name,
-                self.environment_path,
                 self.environment,
-                self.hop_config_path,
                 self.hop_conn_id,
                 self.log_level).get_conn()
 

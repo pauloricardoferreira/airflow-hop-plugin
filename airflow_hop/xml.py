@@ -19,7 +19,7 @@ import json
 from xml.etree import ElementTree
 from xml.etree.ElementTree import Element
 
-from airflow.exceptions import AirflowException
+from airflow import AirflowException
 
 class XMLBuilder:
     """
@@ -32,25 +32,23 @@ class XMLBuilder:
 
     def __init__(
                 self,
-                project_path,
+                hop_home,
+                project_name,
                 task_params,
-                environment_name,
-                environment_path,
-                hop_config_path
-                ):
+                environment_name = None):
 
-        # name default hop-config.json
-        with open(f'{hop_config_path}/hop-config.json', encoding='utf-8') as file:
+        with open(f'{hop_home}/config/hop-config.json', encoding='utf-8') as file:
             config_data = json.load(file)
 
         self.global_variables = config_data['variables']
 
-        # name default metadata.json
-        self.project_folder = project_path
+        project = next(item for item in config_data['projectsConfig']['projectConfigurations']
+            if item['projectName'] == project_name)
+        self.project_home = project['projectHome']
+        self.project_folder = f'{hop_home}/{project["projectHome"]}'
         self.metastore_file = f'{self.project_folder}/metadata.json'
 
-        # name default 'project-config.json'
-        with open(f'{self.environment_path}/project-config.json') as file:
+        with open(f'{self.project_folder}/{project["configFilename"]}') as file:
             project_data = json.load(file)
         self.project_variables = project_data['config']['variables']
 
@@ -62,10 +60,12 @@ class XMLBuilder:
         self.environment_vars = []
         if environment_name is None: return
 
-        # env file 'Production/Development/Etc'
-        with open(f'{environment_path}/{environment_name}', encoding='utf-8') as file:
-            env_data = json.load(file)
-        self.environment_vars = self.environment_vars + env_data['variables']
+        env = next(item for item in config_data['projectsConfig']['lifecycleEnvironments']
+            if item['name'] == environment_name)
+        for env_file in env['configurationFiles']:
+            with open(f'{hop_home}/{env_file}', encoding='utf-8') as file:
+                env_data = json.load(file)
+            self.environment_vars = self.environment_vars + env_data['variables']
 
     def get_workflow_xml(self, workflow_name) -> bytes:
         workflow_path = f'{self.project_folder}/{workflow_name}'
