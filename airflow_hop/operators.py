@@ -17,7 +17,7 @@ import re
 import zlib
 import time
 from typing import Any
-from airflow import AirflowException
+from airflow .exceptions import AirflowException
 
 from airflow.models import BaseOperator
 from airflow.utils.context import Context
