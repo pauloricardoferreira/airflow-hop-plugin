@@ -17,7 +17,7 @@ import re
 import zlib
 import time
 from typing import Any
-from airflow .exceptions import AirflowException
+from airflow.exceptions import AirflowException
 
 from airflow.models import BaseOperator
 from airflow.utils.context import Context
@@ -60,7 +60,7 @@ class HopWorkflowOperator(HopBaseOperator):
                  environment_name,
                  hop_config_path,
                  *args,
-                 params,
+                 params=None,
                  hop_conn_id='hop_default',
                  **kwargs):
         super().__init__(*args, **kwargs)
@@ -129,7 +129,7 @@ class HopPipelineOperator(HopBaseOperator):
                  environment_name,
                  hop_config_path,
                  *args,
-                 params,
+                 params=None,
                  hop_conn_id='hop_default',
                  **kwargs):
         super().__init__(*args, **kwargs)
