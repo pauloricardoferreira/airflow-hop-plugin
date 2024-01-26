@@ -59,9 +59,9 @@ class HopWorkflowOperator(HopBaseOperator):
                  environment_path,
                  environment_name,
                  hop_config_path,
+                 *args,
                  params,
                  hop_conn_id='hop_default',
-                 *args,
                  **kwargs):
         super().__init__(*args, **kwargs)
         self.workflow = workflow
@@ -128,9 +128,9 @@ class HopPipelineOperator(HopBaseOperator):
                  environment_path,
                  environment_name,
                  hop_config_path,
+                 *args,
                  params,
                  hop_conn_id='hop_default',
-                 *args,
                  **kwargs):
         super().__init__(*args, **kwargs)
         self.pipeline = pipeline
