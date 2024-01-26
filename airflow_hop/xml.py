@@ -65,7 +65,7 @@ class XMLBuilder:
             if item['name'] == environment_name)
         for env_file in env['configurationFiles']:
             env_file = env_file.split('/')[-1]
-            with open(f'{project_path}/{env_file}', encoding='utf-8') as file:
+            with open(f'{environment_path}/{env_file}', encoding='utf-8') as file:
                 env_data = json.load(file)
             environment_vars = environment_vars + env_data['variables']
 

@@ -1,0 +1,7 @@
+hop_default:
+  conn_type: http
+  login: cluster
+  password: cluster
+  conn_id: hop_default
+  host: localhost:
+  post: 8182
