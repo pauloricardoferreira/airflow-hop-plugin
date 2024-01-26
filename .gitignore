@@ -132,3 +132,7 @@ dmypy.json
 docker_files/
 
 teste_dag.py
+
+
+arquivos/*
+teste.py

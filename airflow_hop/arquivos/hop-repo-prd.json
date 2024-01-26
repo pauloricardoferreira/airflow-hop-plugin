@@ -1,0 +1,247 @@
+{
+  "variables" : [ {
+    "name" : "PROJECT_HOME",
+    "value" : "/opt/projetos/hop_repo",
+    "description" : ""
+  }, {
+    "name" : "_API_KEY",
+    "value" : "a79becb166a02480d1faff46fbe3820e45b9b82c06cd82f8fdeb97e8b4a3f106",
+    "description" : ""
+  }, {
+    "name" : "_DB_AGTCOA_PASSWORD",
+    "value" : "Encrypted 2be98afc80bc0c387fb4bfd249a93a8ce",
+    "description" : ""
+  }, {
+    "name" : "_DB_AGTCOA_USER",
+    "value" : "agtcoa",
+    "description" : ""
+  }, {
+    "name" : "_DB_AGTDW_HACK",
+    "value" : "(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=oracleprd.agroterenas.com.br)(PORT = 1543)) (CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = AGTDW)))",
+    "description" : ""
+  }, {
+    "name" : "_DB_AGTDW_HOST",
+    "value" : "localhost",
+    "description" : ""
+  }, {
+    "name" : "_DB_AGTDW_PASSWORD",
+    "value" : "Encrypted 2bee8cebb19c69590af0efc208cc1add3",
+    "description" : ""
+  }, {
+    "name" : "_DB_AGTDW_PORT",
+    "value" : "1521",
+    "description" : ""
+  }, {
+    "name" : "_DB_AGTDW_SCHEMA",
+    "value" : "AGTDW",
+    "description" : ""
+  }, {
+    "name" : "_DB_AGTDW_USER",
+    "value" : "agtdw",
+    "description" : ""
+  }, {
+    "name" : "_DB_AGTPIMS_PASSWORD",
+    "value" : "Encrypted 2be98afc86aa7b3a39f29875dedbf8ee8",
+    "description" : ""
+  }, {
+    "name" : "_DB_AGTPIMS_USER",
+    "value" : "agtpims",
+    "description" : ""
+  }, {
+    "name" : "_DB_API_DATABASE",
+    "value" : "postgres",
+    "description" : ""
+  }, {
+    "name" : "_DB_API_HOST",
+    "value" : "192.168.56.121",
+    "description" : ""
+  }, {
+    "name" : "_DB_API_PASSWORD",
+    "value" : "postgres",
+    "description" : ""
+  }, {
+    "name" : "_DB_API_PORT",
+    "value" : "5433",
+    "description" : ""
+  }, {
+    "name" : "_DB_API_USER",
+    "value" : "postgres",
+    "description" : ""
+  }, {
+    "name" : "_DB_EBS_APPSELECT_USER_PASSWOR",
+    "value" : "appselect",
+    "description" : ""
+  }, {
+    "name" : "_DB_EBS_HACK",
+    "value" : "(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=oracleprd.agroterenas.com.br)(PORT=1521))(CONNECT_DATA=(SERVER = DEDICATED)      (SERVICE_NAME = ebs_PROD)(INSTANCE_NAME=CDBAGRO)))",
+    "description" : ""
+  }, {
+    "name" : "_DB_EBS_PORT",
+    "value" : "1521",
+    "description" : ""
+  }, {
+    "name" : "_DB_EBS_SERVICE_NAME",
+    "value" : "ebs_PROD",
+    "description" : ""
+  }, {
+    "name" : "_DB_HOST_DEV",
+    "value" : "oracledev.agroterenas.com.br",
+    "description" : ""
+  }, {
+    "name" : "_DB_HOST_PRD",
+    "value" : "oracleprd.agroterenas.com.br",
+    "description" : ""
+  }, {
+    "name" : "_DB_HOST_PRD_EBS",
+    "value" : "oracleprd.agroterenas.com.br",
+    "description" : ""
+  }, {
+    "name" : "_DB_ORACLE_LOCAL_HACK",
+    "value" : "(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=172.23.125.175)(PORT = 1521)) (CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = FREE)))",
+    "description" : ""
+  }, {
+    "name" : "_DB_ORACLE_LOCAL_PASSWORD",
+    "value" : "developer",
+    "description" : ""
+  }, {
+    "name" : "_DB_ORACLE_LOCAL_USER",
+    "value" : "c##developer",
+    "description" : ""
+  }, {
+    "name" : "_DB_PIMSQAS_PORT",
+    "value" : "1528",
+    "description" : ""
+  }, {
+    "name" : "_DB_PIMSQAS_SERVICE_NAME",
+    "value" : "PIMSQAS",
+    "description" : ""
+  }, {
+    "name" : "_DB_PIMS_PIMSSLCT_USER_PASSWORD",
+    "value" : "pims_slct",
+    "description" : ""
+  }, {
+    "name" : "_DB_PIMS_PORT",
+    "value" : "1526",
+    "description" : ""
+  }, {
+    "name" : "_DB_PIMS_SERVICE_NAME",
+    "value" : "PIMSCS",
+    "description" : ""
+  }, {
+    "name" : "_DB_TGC_DATABASE_NAME",
+    "value" : "/ga/database/tgc_agroventura_2021.fdb",
+    "description" : ""
+  }, {
+    "name" : "_DB_TGC_HOST",
+    "value" : "172.17.18.204",
+    "description" : ""
+  }, {
+    "name" : "_DB_TGC_PASSWORD",
+    "value" : "masterkey",
+    "description" : ""
+  }, {
+    "name" : "_DB_TGC_PORT",
+    "value" : "3050",
+    "description" : ""
+  }, {
+    "name" : "_DB_TGC_USER",
+    "value" : "sysdba",
+    "description" : ""
+  }, {
+    "name" : "_EMAIL_IMAP_SERV",
+    "value" : "imap.gmail.com",
+    "description" : ""
+  }, {
+    "name" : "_EMAIL_IMAP_SERV_PORT",
+    "value" : "993",
+    "description" : ""
+  }, {
+    "name" : "_EMAIL_MSG_TAREFA_DIF_INSUMOS",
+    "value" : "Pentaho - Dif Insumos",
+    "description" : ""
+  }, {
+    "name" : "_EMAIL_MSG_TAREFA_EXECUTADA",
+    "value" : "Pentaho - Tarefa Executada",
+    "description" : ""
+  }, {
+    "name" : "_EMAIL_MSG_TAREFA_IGNORADA",
+    "value" : "Pentaho - Tarefa Ignorada",
+    "description" : ""
+  }, {
+    "name" : "_EMAIL_MSG_TAREFA_NAO_EXECUTADA",
+    "value" : "Pentaho - Tarefa Nao Executada",
+    "description" : ""
+  }, {
+    "name" : "_EMAIL_POP_SERV",
+    "value" : "pop.gmail.com",
+    "description" : ""
+  }, {
+    "name" : "_EMAIL_POP_SERV_PORT",
+    "value" : "995",
+    "description" : ""
+  }, {
+    "name" : "_EMAIL_SENDER_EMAIL",
+    "value" : "processospdi@gmail.com",
+    "description" : ""
+  }, {
+    "name" : "_EMAIL_SENDER_NAME",
+    "value" : "Pentaho",
+    "description" : ""
+  }, {
+    "name" : "_EMAIL_SENDER_PASSWORD",
+    "value" : "xhrtwtgicppcsrlx",
+    "description" : ""
+  }, {
+    "name" : "_EMAIL_SEND_TO",
+    "value" : "paulo.ricardo@agroterenas.com.br, lucas.bernardes@agroterenas.com.br",
+    "description" : ""
+  }, {
+    "name" : "_EMAIL_SEND_TO_ALERTA_ESTACAO",
+    "value" : "paulo.ricardo@agroterenas.com.br, alexandre.morais@agroterenas.com.br, renato.tornich@agroterenas.com.br, marco.bortoletto@agroterenas.com.br, larissa.brito@agroterenas.com.br, rodrigo.santos@agroterenas.com.br, matheus.campos@agroterenas.com.br, marcelo.marino@agroterenas.com.br",
+    "description" : ""
+  }, {
+    "name" : "_EMAIL_SMTP_SERV",
+    "value" : "smtp.gmail.com",
+    "description" : ""
+  }, {
+    "name" : "_EMAIL_SMTP_SERV_PORT",
+    "value" : "465",
+    "description" : ""
+  }, {
+    "name" : "_FILE_ORCAMENTO",
+    "value" : "${PROJECT_HOME}/ORCAMENTO/ORCAMENTO.xlsx",
+    "description" : ""
+  }, {
+    "name" : "_FTP_EST_MET",
+    "value" : "oracleprd.agroterenas.com.br",
+    "description" : ""
+  }, {
+    "name" : "_FTP_EST_MET_PASSWORD",
+    "value" : "Encrypted 2be98afc86aa7b290a209a77dcd93a8ce",
+    "description" : ""
+  }, {
+    "name" : "_FTP_EST_MET_USER",
+    "value" : "ftppims",
+    "description" : ""
+  }, {
+    "name" : "_LOG_EXT",
+    "value" : "txt",
+    "description" : ""
+  }, {
+    "name" : "_LOG_FILE",
+    "value" : "/opt/logs_hop/ETL_LOG/_LOG_${Internal.Workflow.Name}",
+    "description" : ""
+  }, {
+    "name" : "_SEMAFORO_BASE_DADOS",
+    "value" : "BASE_DADOS",
+    "description" : ""
+  }, {
+    "name" : "_TMP_BASE_SEMAFORO",
+    "value" : "/opt/logs_hop/TMP_BASE_SEMAFORO",
+    "description" : ""
+  }, {
+    "name" : "_TMP_GET_MAIL_SEMAFORO",
+    "value" : "/opt/logs_hop/TMP_GET_MAIL_SEMAFORO",
+    "description" : ""
+  } ]
+}

@@ -50,17 +50,21 @@ class HopHook(BaseHook):
                 username,
                 password,
                 log_level,
-                hop_home,
+                project_path,
                 project_name,
-                environment):
+                environment_name,
+                environment_path,
+                hop_config_path):
             self.host = host
             self.port = port
             self.username = username
             self.password = password
             self.log_level = log_level
-            self.hop_home = hop_home
+            self.project_path = project_path
             self.project_name = project_name
-            self.environment = environment
+            self.environment_path = environment_path
+            self.environment_name = environment_name
+            self.hop_config_path = hop_config_path
 
         def __get_url(self, endpoint):
             return f'http://{self.host}:{self.port}{endpoint}'
@@ -236,6 +240,7 @@ class HopHook(BaseHook):
             project_name,
             environment_path,
             environment_name,
+            hop_config_path,
             conn_id='hop_default',
             log_level='Basic'):
         """Hop Hook constructor to initialize the object."""
@@ -250,6 +255,7 @@ class HopHook(BaseHook):
         self.hop_client = None
         self.environment_path = environment_path
         self.environment_name = environment_name
+        self.hop_config_path = hop_config_path
 
     def get_conn(self) -> HopServerConnection:
         if self.hop_client:
@@ -261,7 +267,9 @@ class HopHook(BaseHook):
             username=self.connection.login,
             password=self.connection.password,
             log_level=self.log_level,
-            hop_home=self.extras.get('hop_home'),
+            project_path=self.project_path,
             project_name=self.project_name,
-            environment=self.environment)
+            environment_name=self.environment_name,
+            environment_path=self.environment_path,
+            hop_config_path=self.hop_config_path)
         return self.hop_client
