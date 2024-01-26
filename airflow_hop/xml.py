@@ -47,7 +47,7 @@ class XMLBuilder:
         project = next(item for item in config_data['projectsConfig']['projectConfigurations']
             if item['projectName'] == project_name)
         
-        self.metastore_file = f'{self.project_folder}/metadata.json'
+        self.metastore_file = f'{self.project_path}/metadata.json'
 
         with open(f'{project_path}/{project["configFilename"]}') as file:
             project_data = json.load(file)
@@ -70,7 +70,7 @@ class XMLBuilder:
             environment_vars = environment_vars + env_data['variables']
 
     def get_workflow_xml(self, workflow_name) -> bytes:
-        workflow_path = f'{self.project_folder}/{workflow_name}'
+        workflow_path = f'{self.project_path}/{workflow_name}'
         root = Element('workflow_configuration')
         try:
             workflow = ElementTree.parse(workflow_path)
@@ -103,7 +103,7 @@ class XMLBuilder:
 
 
     def get_pipeline_xml(self, pipeline_name, pipeline_config) -> bytes:
-        pipeline_path = f'{self.project_folder}/{pipeline_name}'
+        pipeline_path = f'{self.project_path}/{pipeline_name}'
         root = Element('pipeline_configuration')
         try:
             pipeline = ElementTree.parse(pipeline_path)
