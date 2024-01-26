@@ -47,7 +47,7 @@ class XMLBuilder:
         project = next(item for item in config_data['projectsConfig']['projectConfigurations']
             if item['projectName'] == project_name)
         
-        self.metastore_file = f'{self.project_path}/metadata.json'
+        self.metastore_file = f'{project_path}/metadata.json'
 
         with open(f'{project_path}/{project["configFilename"]}') as file:
             project_data = json.load(file)
