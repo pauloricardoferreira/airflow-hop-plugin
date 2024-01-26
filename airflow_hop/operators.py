@@ -58,9 +58,9 @@ class HopWorkflowOperator(HopBaseOperator):
                  project_name,
                  log_level,
                  environment_path,
-                 environment=None,
+                 environment,
                  hop_config_path,
-                 params=None,
+                 params,
                  hop_conn_id='hop_default',
                  **kwargs):
         super().__init__(*args, **kwargs)
@@ -126,9 +126,9 @@ class HopPipelineOperator(HopBaseOperator):
                  project_name,
                  log_level,
                  environment_path,
-                 environment=None,
+                 environment,
                  hop_config_path,
-                 params=None,
+                 params,
                  hop_conn_id='hop_default',
                  **kwargs):
         super().__init__(*args, **kwargs)
