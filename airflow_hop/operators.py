@@ -52,7 +52,6 @@ class HopWorkflowOperator(HopBaseOperator):
     template_fields = ('task_params',)
 
     def __init__(self,
-                 *args,
                  workflow,
                  project_path,
                  project_name,
@@ -62,6 +61,7 @@ class HopWorkflowOperator(HopBaseOperator):
                  hop_config_path,
                  params,
                  hop_conn_id='hop_default',
+                 *args,
                  **kwargs):
         super().__init__(*args, **kwargs)
         self.workflow = workflow
@@ -121,7 +121,6 @@ class HopPipelineOperator(HopBaseOperator):
     template_fields = ('task_params',)
 
     def __init__(self,
-                 *args,
                  pipeline,
                  project_path,
                  project_name,
@@ -131,6 +130,7 @@ class HopPipelineOperator(HopBaseOperator):
                  hop_config_path,
                  params,
                  hop_conn_id='hop_default',
+                 *args,
                  **kwargs):
         super().__init__(*args, **kwargs)
         self.pipeline = pipeline
