@@ -67,7 +67,7 @@ class XMLBuilder:
             env_file = env_file.split('/')[-1]
             with open(f'{environment_path}/{env_file}', encoding='utf-8') as file:
                 env_data = json.load(file)
-            environment_vars = environment_vars + env_data['variables']
+            self.environment_vars = self.environment_vars + env_data['variables']
 
     def get_workflow_xml(self, workflow_name) -> bytes:
         workflow_path = f'{self.project_path}/{workflow_name}'
