@@ -74,10 +74,12 @@ class HopHook(BaseHook):
 
         def register_pipeline(self, pipe_name, pipe_config, task_params=None):
             xml_builder = XMLBuilder(
-                self.hop_home,
+                self.project_path,
                 self.project_name,
                 task_params,
-                self.environment)
+                self.environment_path,
+                self.environment_name,
+                self.hop_config_path)
             data = xml_builder.get_pipeline_xml(pipe_name, pipe_config)
             parameters = {'xml': 'Y'}
             response = requests.post(url=self.__get_url(self.REGISTER_PIPELINE),
@@ -161,10 +163,12 @@ class HopHook(BaseHook):
 
         def register_workflow(self, workflow_name, task_params=None):
             xml_builder = XMLBuilder(
-                self.hop_home,
+                self.project_path,
                 self.project_name,
                 task_params,
-                self.environment)
+                self.environment_path,
+                self.environment_name,
+                self.hop_config_path)
             data = xml_builder.get_workflow_xml(workflow_name)
             parameters = {'xml': 'Y'}
             response = requests.post(url=self.__get_url(self.REGISTER_WORKFLOW),
