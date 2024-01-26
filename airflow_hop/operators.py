@@ -58,7 +58,7 @@ class HopWorkflowOperator(HopBaseOperator):
                  project_name,
                  log_level,
                  environment_path,
-                 environment,
+                 environment_name,
                  hop_config_path,
                  params,
                  hop_conn_id='hop_default',
@@ -71,13 +71,14 @@ class HopWorkflowOperator(HopBaseOperator):
         self.task_params = params
         self.hop_conn_id = hop_conn_id
         self.environment_path = environment_path
-        self.environment = environment
+        self.environment_name = environment_name
         self.hop_config_path = hop_config_path
 
     def __get_hop_client(self):
         return HopHook(
+                self.project_path,
                 self.project_name,
-                self.environment,
+                self.environment_name,
                 self.hop_conn_id,
                 self.log_level).get_conn()
 
@@ -126,7 +127,7 @@ class HopPipelineOperator(HopBaseOperator):
                  project_name,
                  log_level,
                  environment_path,
-                 environment,
+                 environment_name,
                  hop_config_path,
                  params,
                  hop_conn_id='hop_default',
@@ -139,13 +140,13 @@ class HopPipelineOperator(HopBaseOperator):
         self.task_params = params
         self.hop_conn_id = hop_conn_id
         self.environment_path = environment_path
-        self.environment = environment
+        self.environment_name = environment_name
         self.hop_config_path = hop_config_path
 
     def __get_hop_client(self):
         return HopHook(
                 self.project_name,
-                self.environment,
+                self.environment_name,
                 self.hop_conn_id,
                 self.log_level).get_conn()
 

@@ -232,7 +232,9 @@ class HopHook(BaseHook):
 
     def __init__(
             self,
+            project_path,
             project_name,
+            environment_path,
             environment_name,
             conn_id='hop_default',
             log_level='Basic'):
@@ -243,9 +245,11 @@ class HopHook(BaseHook):
         self.extras = self.connection.extra_dejson
         self.log_level = log_level
         self.extras = self.connection.extra_dejson
+        self.project_path = project_path
         self.project_name = project_name
         self.hop_client = None
-        self.environment = environment_name
+        self.environment_path = environment_path
+        self.environment_name = environment_name
 
     def get_conn(self) -> HopServerConnection:
         if self.hop_client:
