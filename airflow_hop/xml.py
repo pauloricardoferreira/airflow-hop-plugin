@@ -34,10 +34,10 @@ class XMLBuilder:
                 self,
                 project_path,
                 project_name,
-                task_params,
                 environment_path,
                 environment_name,
-                hop_config_path):
+                hop_config_path,
+                task_params):
 
         with open(f'{hop_config_path}/hop-config.json', encoding='utf-8') as file:
             config_data = json.load(file)
