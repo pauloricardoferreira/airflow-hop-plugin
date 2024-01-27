@@ -52,6 +52,8 @@ class XMLBuilder:
 
         metadata_path = f'{self.project_path}/metadata'
 
+        print(f'Metapah: {metadata_path}')
+
         self.metastore_file = {}
 
         for i in os.listdir(metadata_path):
@@ -59,13 +61,17 @@ class XMLBuilder:
 
             self.metastore_file[i] = []
             
-            metadata_path_node = os.listdir(metadata_path+"/"+i)
+            metadata_path_node = os.listdir(f'{metadata_path}/{i}')
+
+            print(f'Metapah Node: {metadata_path_node}')
 
             if metadata_path_node != []:
                 for j in metadata_path_node:
                     meta_files = f'{metadata_path}/{i}/{j}'
 
-                    with open(f'{meta_files}', 'r', encoding='utf-8') as meta_file:
+                    print(f'Metafile: {meta_files}')
+
+                    with open(f'{meta_files}') as meta_file:
                         meta_file_tmp = json.load(meta_file)
 
                     metastore_tmp.append(meta_file_tmp)
