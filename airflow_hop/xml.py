@@ -16,6 +16,7 @@
 import base64
 import gzip
 import json
+import os
 from xml.etree import ElementTree
 from xml.etree.ElementTree import Element
 
@@ -48,8 +49,29 @@ class XMLBuilder:
 
         project = next(item for item in config_data['projectsConfig']['projectConfigurations']
             if item['projectName'] == project_name)
+
+        self.metadata_path = f'{self.project_path}/metadata'
+
+        self.metastore_file = {}
+
+        for i in os.listdir(self.metadata_path):
+            metastore_tmp = []
+
+            self.metastore_file[i] = []
+            
+            metadata_path_node = os.listdir(self.metadata_path+"/"+i)
+
+            if metadata_path_node != []:
+                for j in metadata_path_node:
+                    meta_files = f'{metadata_path_node}/{i}/{j}'
+
+                    with open(f'{meta_files}', 'r', encoding='utf-8') as meta_file:
+                        meta_file_tmp = json.load(meta_file)
+
+                    metastore_tmp.append(meta_file_tmp)
+                self.metastore_file[i] = metastore_tmp
         
-        self.metastore_file = f'{project_path}/metadata.json'
+        # self.metastore_file = f'{project_path}/metadata.json'
 
         with open(f'{project_path}/{project["configFilename"]}') as file:
             project_data = json.load(file)
