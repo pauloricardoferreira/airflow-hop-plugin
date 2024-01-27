@@ -183,8 +183,8 @@ class XMLBuilder:
             root.append(new_variable)
 
         if pipeline_config is not None:
-            with open(self.metastore_file, encoding='utf-8') as f:
-                data = json.load(f)
+            # with open(self.metastore_file, encoding='utf-8') as f::
+            data = json.load(self.metastore_file)
 
             run_config = next(item for item in data['pipeline-run-configuration']
                 if item['name'] == pipeline_config)
@@ -219,8 +219,8 @@ class XMLBuilder:
         return root
 
     def __generate_metastore(self) -> str:
-        with open(self.metastore_file, mode='br') as file:
-            content = file.read()
+        # with open(self.metastore_file, mode='br') as file:
+        content = json.loads(self.metastore_file)
         metastore = gzip.compress(content)
         return base64.b64encode(metastore).decode('utf-8')
 
