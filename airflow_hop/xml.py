@@ -63,7 +63,7 @@ class XMLBuilder:
 
             if metadata_path_node != []:
                 for j in metadata_path_node:
-                    meta_files = f'{metadata_path_node}/{i}/{j}'
+                    meta_files = f'{self.metadata_path}/{i}/{j}'
 
                     with open(f'{meta_files}', 'r', encoding='utf-8') as meta_file:
                         meta_file_tmp = json.load(meta_file)
