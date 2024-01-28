@@ -79,7 +79,7 @@ class XMLBuilder:
         
         # self.metastore_file = f'{project_path}/metadata.json'
 
-        self.metastore_file = json.dump(self.metastore_file)
+        # self.metastore_file = json.dump(self.metastore_file)
 
         with open(f'{project_path}/{project["configFilename"]}') as file:
             project_data = json.load(file)
@@ -186,7 +186,7 @@ class XMLBuilder:
 
         if pipeline_config is not None:
             # with open(self.metastore_file, encoding='utf-8') as f::
-            data = json.load(self.metastore_file)
+            data = json.loads(self.metastore_file)
 
             run_config = next(item for item in data['pipeline-run-configuration']
                 if item['name'] == pipeline_config)
