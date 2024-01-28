@@ -55,32 +55,32 @@ class XMLBuilder:
 
         # print(f'Metapah: {metadata_path}')
 
-        self.metastore_file = {}
+        # self.metastore_file = {}
 
-        for i in os.listdir(metadata_path):
-            metastore_tmp = []
+        # for i in os.listdir(metadata_path):
+        #     metastore_tmp = []
 
-            self.metastore_file[i] = []
+        #     self.metastore_file[i] = []
             
-            metadata_path_node = os.listdir(f'{metadata_path}/{i}')
+        #     metadata_path_node = os.listdir(f'{metadata_path}/{i}')
 
-            # print(f'Metapah Node: {metadata_path_node}')
+        #     # print(f'Metapah Node: {metadata_path_node}')
 
-            if metadata_path_node != []:
-                for j in metadata_path_node:
-                    meta_files = f'{metadata_path}/{i}/{j}'
+        #     if metadata_path_node != []:
+        #         for j in metadata_path_node:
+        #             meta_files = f'{metadata_path}/{i}/{j}'
 
-                    # print(f'Metafile: {meta_files}')
+        #             # print(f'Metafile: {meta_files}')
 
-                    with open(f'{meta_files}', encoding='utf-8') as meta_file:
-                        meta_file_tmp = json.load(meta_file)
+        #             with open(f'{meta_files}', encoding='utf-8') as meta_file:
+        #                 meta_file_tmp = json.load(meta_file)
 
-                    metastore_tmp.append(meta_file_tmp)
-                self.metastore_file[i] = metastore_tmp
+        #             metastore_tmp.append(meta_file_tmp)
+        #         self.metastore_file[i] = metastore_tmp
         
-        # self.metastore_file = f'{project_path}/metadata.json'
+        self.metastore_file = f'{project_path}/metadata.json'
 
-        self.metastore_file = json.dumps(self.metastore_file).strip().replace(': ',':').replace(', ',',')
+        # self.metastore_file = json.dumps(self.metastore_file).strip().replace(': ',':').replace(', ',',')
 
         # self.metastore_file = self.metastore_file.strip()
 
@@ -188,8 +188,8 @@ class XMLBuilder:
             root.append(new_variable)
 
         if pipeline_config is not None:
-            # with open(self.metastore_file, encoding='utf-8') as f::
-            data = pickle.dumps(self.metastore_file)
+            with open(self.metastore_file, encoding='utf-8') as f:
+                data = json.load(f)
 
             run_config = next(item for item in data['pipeline-run-configuration']
                 if item['name'] == pipeline_config)
@@ -224,8 +224,8 @@ class XMLBuilder:
         return root
 
     def __generate_metastore(self) -> str:
-        # with open(self.metastore_file, mode='br') as file:
-        content = pickle.dumps(self.metastore_file)
+        with open(self.metastore_file, mode='br') as file:
+            content = file.read()
         metastore = gzip.compress(content)
         return base64.b64encode(metastore).decode('utf-8')
 
