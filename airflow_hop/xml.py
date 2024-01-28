@@ -17,6 +17,7 @@ import base64
 import gzip
 import json
 import os
+import pickle
 from xml.etree import ElementTree
 from xml.etree.ElementTree import Element
 
@@ -79,7 +80,9 @@ class XMLBuilder:
         
         # self.metastore_file = f'{project_path}/metadata.json'
 
-        # self.metastore_file = json.dump(self.metastore_file)
+        self.metastore_file = json.dumps(self.metastore_file).strip().replace(': ',':').replace(', ',',')
+
+        # self.metastore_file = self.metastore_file.strip()
 
         with open(f'{project_path}/{project["configFilename"]}') as file:
             project_data = json.load(file)
@@ -186,7 +189,7 @@ class XMLBuilder:
 
         if pipeline_config is not None:
             # with open(self.metastore_file, encoding='utf-8') as f::
-            data = json.dumps(self.metastore_file)
+            data = pickle.dumps(self.metastore_file)
 
             run_config = next(item for item in data['pipeline-run-configuration']
                 if item['name'] == pipeline_config)
@@ -222,7 +225,7 @@ class XMLBuilder:
 
     def __generate_metastore(self) -> str:
         # with open(self.metastore_file, mode='br') as file:
-        content = json.dumps(self.metastore_file)
+        content = pickle.dumps(self.metastore_file)
         metastore = gzip.compress(content)
         return base64.b64encode(metastore).decode('utf-8')
 
