@@ -72,7 +72,7 @@ class XMLBuilder:
 
                     # print(f'Metafile: {meta_files}')
 
-                    with open(f'{meta_files}') as meta_file:
+                    with open(f'{meta_files}', encoding='utf-8') as meta_file:
                         meta_file_tmp = json.load(meta_file)
 
                     metastore_tmp.append(meta_file_tmp)
