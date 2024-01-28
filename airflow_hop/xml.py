@@ -79,6 +79,8 @@ class XMLBuilder:
         
         # self.metastore_file = f'{project_path}/metadata.json'
 
+        self.metastore_file = json.dump(self.metastore_file)
+
         with open(f'{project_path}/{project["configFilename"]}') as file:
             project_data = json.load(file)
         self.project_variables = project_data['config']['variables']
