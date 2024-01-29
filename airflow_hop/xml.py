@@ -51,7 +51,7 @@ class XMLBuilder:
         project = next(item for item in config_data['projectsConfig']['projectConfigurations']
             if item['projectName'] == project_name)
 
-        metadata_path = f'{self.project_path}/metadata'
+        # metadata_path = f'{self.project_path}/metadata'
 
         # print(f'Metapah: {metadata_path}')
 
@@ -78,7 +78,7 @@ class XMLBuilder:
         #             metastore_tmp.append(meta_file_tmp)
         #         self.metastore_file[i] = metastore_tmp
         
-        self.metastore_file = f'{metadata_path}/metadata.json'
+        self.metastore_file = f'{project_path}/metadata.json'
 
         # self.metastore_file = json.dumps(self.metastore_file).strip().replace(': ',':').replace(', ',',')
 
@@ -214,6 +214,7 @@ class XMLBuilder:
             root.append(new_variable)
 
         project_home = Element('variable')
+        print(f'Passei por aqui: {self.project_path}')
         project_home.append(self.__generate_element('name','PROJECT_HOME'))
         project_home.append(self.__generate_element('value',self.project_path))
 
