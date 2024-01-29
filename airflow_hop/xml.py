@@ -78,7 +78,7 @@ class XMLBuilder:
         #             metastore_tmp.append(meta_file_tmp)
         #         self.metastore_file[i] = metastore_tmp
         
-        self.metastore_file = f'{project_path}/metadata.json'
+        self.metastore_file = f'{metadata_path}/metadata.json'
 
         # self.metastore_file = json.dumps(self.metastore_file).strip().replace(': ',':').replace(', ',',')
 
