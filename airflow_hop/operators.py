@@ -144,7 +144,7 @@ class HopPipelineOperator(HopBaseOperator):
         self.hop_conn_id = hop_conn_id
         self.environment_path = environment_path
         self.environment_name = environment_name
-        self.hop_config_path = hop_config_path,
+        self.hop_config_path = hop_config_path
         self.pipe_config = pipe_config
 
     def __get_hop_client(self):
