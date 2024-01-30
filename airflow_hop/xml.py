@@ -183,7 +183,6 @@ class XMLBuilder:
             root.append(new_variable)
 
         project_home = Element('variable')
-        print(f'Passei por aqui: {self.project_path}')
         project_home.append(self.__generate_element('name','PROJECT_HOME'))
         project_home.append(self.__generate_element('value',self.project_path))
 
