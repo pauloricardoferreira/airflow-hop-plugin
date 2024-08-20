@@ -36,15 +36,23 @@ class HopBaseOperator(BaseOperator):
     END_STATUSES = FINISHED_STATUSES + ERROR_STATUSES
 
     def _log_logging_string(self, raw_logging_string):
-        logs = raw_logging_string
-        cdata = re.match(r'\<\!\[CDATA\[([^\]]+)\]\]\>', logs)
+        # Decodifica e descomprime o log
+        cdata = re.match(r'\<\!\[CDATA\[([^\]]+)\]\]\>', raw_logging_string)
         cdata = cdata.group(1) if cdata else raw_logging_string
         decoded_lines = zlib.decompress(base64.b64decode(cdata),
                                         16 + zlib.MAX_WBITS)
         if decoded_lines:
-            for line in re.compile(r'\r\n|\n|\r').split(
-                    decoded_lines.decode('utf-8')):
-                self.log.info(line)
+            # Divide o log em linhas
+            lines = re.compile(r'\r\n|\n|\r').split(decoded_lines.decode('utf-8'))
+
+            # Imprime apenas as novas linhas desde a última iteração
+            new_lines = lines[self.last_log_size:]
+            for line in new_lines:
+                if "DEBUG" not in line:  # Exemplo de filtragem, remover linhas DEBUG
+                    self.log.info(line)
+
+            # Atualiza o tamanho do log
+            self.last_log_size = len(lines)
 
 class HopWorkflowOperator(HopBaseOperator):
     """Hop Workflow Operator"""
