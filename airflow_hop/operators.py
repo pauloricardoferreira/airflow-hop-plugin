@@ -91,6 +91,9 @@ class HopWorkflowOperator(HopBaseOperator):
         self.task_params = params
         self.hop_conn_id = hop_conn_id
 
+        # Inicializa last_log_size no construtor específico
+        self.last_log_size = 0
+
     def __get_hop_client(self):
         return HopHook(
                 self.project_path,
@@ -163,6 +166,9 @@ class HopPipelineOperator(HopBaseOperator):
         self.environment_name = environment_name
         self.hop_config_path = hop_config_path
         self.pipe_config = pipe_config
+
+        # Inicializa last_log_size no construtor específico
+        self.last_log_size = 0
 
     def __get_hop_client(self):
         return HopHook(
