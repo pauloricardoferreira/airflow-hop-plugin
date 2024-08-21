@@ -122,7 +122,7 @@ class HopWorkflowOperator(HopBaseOperator):
             self._log_logging_string(status['logging_string'])
 
             if status_desc not in self.END_STATUSES:
-                self.log.info(f"Waiting for 5 seconds before rechecking status")
+                # self.log.info(f"Waiting for 5 seconds before rechecking status")
                 time.sleep(5)
 
         # Adiciona logs adicionais para diagnóstico
@@ -202,7 +202,7 @@ class HopPipelineOperator(HopBaseOperator):
             self._log_logging_string(status['logging_string'])
 
             if status_desc not in self.END_STATUSES:
-                self.log.info(f"Waiting for 5 seconds before rechecking status")
+                # self.log.info(f"Waiting for 5 seconds before rechecking status")
                 time.sleep(5)
 
         # Adiciona logs adicionais para diagnóstico
