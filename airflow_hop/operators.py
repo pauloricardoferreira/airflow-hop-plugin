@@ -126,7 +126,7 @@ class HopWorkflowOperator(HopBaseOperator):
             self._log_logging_string(status['logging_string'])
 
             if status_desc not in self.END_STATUSES:
-                self.log.info('Sleeping 5 seconds before ask again')
+                # self.log.info('Sleeping 5 seconds before ask again')
                 time.sleep(5)
 
         if 'error_desc' in status and status['error_desc']:
@@ -207,7 +207,7 @@ class HopPipelineOperator(HopBaseOperator):
             self._log_logging_string(status['logging_string'])
 
             if status_desc not in self.END_STATUSES:
-                self.log.info('Sleeping 5 seconds before ask again')
+                # self.log.info('Sleeping 5 seconds before ask again')
                 time.sleep(5)
 
         if 'error_desc' in status and status['error_desc']:
