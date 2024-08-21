@@ -3,7 +3,6 @@
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
 #
 #    http://www.apache.org/licenses/LICENSE-2.0
 #
@@ -19,7 +18,6 @@ import zlib
 import time
 from typing import Any
 from airflow.exceptions import AirflowException
-
 from airflow.models import BaseOperator
 from airflow.utils.context import Context
 from airflow_hop.hooks import HopHook
@@ -91,9 +89,6 @@ class HopWorkflowOperator(HopBaseOperator):
         self.task_params = params
         self.hop_conn_id = hop_conn_id
 
-        # Inicializa last_log_size no construtor específico
-        self.last_log_size = 0
-
     def __get_hop_client(self):
         return HopHook(
                 self.project_path,
@@ -126,16 +121,19 @@ class HopWorkflowOperator(HopBaseOperator):
             self._log_logging_string(status['logging_string'])
 
             if status_desc not in self.END_STATUSES:
+                # Adicione informações de diagnóstico aqui, se necessário
                 # self.log.info('Sleeping 5 seconds before ask again')
                 time.sleep(5)
 
+        # Adiciona logs adicionais para diagnóstico
         if 'error_desc' in status and status['error_desc']:
+            self.log.error(f"Error description: {status['error_desc']}")
             self.log.error(self.LOG_TEMPLATE, status['error_desc'], self.workflow, work_id)
 
         if status_desc in self.ERROR_STATUSES:
+            self.log.error(f"Final status: {status_desc}")
             self.log.error(self.LOG_TEMPLATE, status_desc, self.workflow, work_id)
-            raise AirflowException(status_desc)
-
+            raise AirflowException(f"Workflow failed with status: {status_desc}")
 
 class HopPipelineOperator(HopBaseOperator):
     """Hop Pipeline Operator"""
@@ -166,9 +164,6 @@ class HopPipelineOperator(HopBaseOperator):
         self.environment_name = environment_name
         self.hop_config_path = hop_config_path
         self.pipe_config = pipe_config
-
-        # Inicializa last_log_size no construtor específico
-        self.last_log_size = 0
 
     def __get_hop_client(self):
         return HopHook(
@@ -207,12 +202,16 @@ class HopPipelineOperator(HopBaseOperator):
             self._log_logging_string(status['logging_string'])
 
             if status_desc not in self.END_STATUSES:
+                # Adicione informações de diagnóstico aqui, se necessário
                 # self.log.info('Sleeping 5 seconds before ask again')
                 time.sleep(5)
 
+        # Adiciona logs adicionais para diagnóstico
         if 'error_desc' in status and status['error_desc']:
+            self.log.error(f"Error description: {status['error_desc']}")
             self.log.error(self.LOG_TEMPLATE, status['error_desc'], self.pipeline, pipe_id)
 
         if status_desc in self.ERROR_STATUSES:
+            self.log.error(f"Final status: {status_desc}")
             self.log.error(self.LOG_TEMPLATE, status_desc, self.pipeline, pipe_id)
-            raise AirflowException(status_desc)
+            raise AirflowException(f"Pipeline failed with status: {status_desc}")
