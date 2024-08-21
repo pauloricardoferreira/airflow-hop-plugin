@@ -35,6 +35,10 @@ class HopBaseOperator(BaseOperator):
     ]
     END_STATUSES = FINISHED_STATUSES + ERROR_STATUSES
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.last_log_size = 0  # Inicializa last_log_size aqui
+
     def _log_logging_string(self, raw_logging_string):
         # Decodifica e descomprime o log
         cdata = re.match(r'\<\!\[CDATA\[([^\]]+)\]\]\>', raw_logging_string)
