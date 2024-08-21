@@ -3,6 +3,7 @@
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
 #    http://www.apache.org/licenses/LICENSE-2.0
 #
@@ -99,7 +100,7 @@ class HopWorkflowOperator(HopBaseOperator):
                 self.hop_conn_id,
                 self.log_level).get_conn()
 
-    def execute(self, context: Context) -> Any: # pylint: disable=unused-argument
+    def execute(self, context: Context) -> Any:
         conn = self.__get_hop_client()
         register_rs = conn.register_workflow(self.workflow, self.task_params)
         message = register_rs['webresult']['message']
@@ -117,22 +118,21 @@ class HopWorkflowOperator(HopBaseOperator):
 
             status = work_status_rs['workflow-status']
             status_desc = status['status_desc']
-            self.log.info(self.LOG_TEMPLATE, status_desc, self.workflow, work_id)
+            self.log.info(f"Status Description: {status_desc}, Workflow ID: {work_id}")
             self._log_logging_string(status['logging_string'])
 
             if status_desc not in self.END_STATUSES:
-                # Adicione informações de diagnóstico aqui, se necessário
-                # self.log.info('Sleeping 5 seconds before ask again')
+                self.log.info(f"Waiting for 5 seconds before rechecking status")
                 time.sleep(5)
 
         # Adiciona logs adicionais para diagnóstico
         if 'error_desc' in status and status['error_desc']:
             self.log.error(f"Error description: {status['error_desc']}")
-            self.log.error(self.LOG_TEMPLATE, status['error_desc'], self.workflow, work_id)
+            self.log.error(f"Detailed status: {status}")
 
         if status_desc in self.ERROR_STATUSES:
             self.log.error(f"Final status: {status_desc}")
-            self.log.error(self.LOG_TEMPLATE, status_desc, self.workflow, work_id)
+            self.log.error(f"Detailed status: {status}")
             raise AirflowException(f"Workflow failed with status: {status_desc}")
 
 class HopPipelineOperator(HopBaseOperator):
@@ -175,7 +175,7 @@ class HopPipelineOperator(HopBaseOperator):
                 self.hop_conn_id,
                 self.log_level).get_conn()
 
-    def execute(self, context: Context) -> Any: # pylint: disable=unused-argument
+    def execute(self, context: Context) -> Any:
         conn = self.__get_hop_client()
 
         register_rs = conn.register_pipeline(self.pipeline, self.pipe_config, self.task_params)
@@ -198,20 +198,19 @@ class HopPipelineOperator(HopBaseOperator):
 
             status = pipe_status_rs['pipeline-status']
             status_desc = status['status_desc']
-            self.log.info(self.LOG_TEMPLATE, status_desc, self.pipeline, pipe_id)
+            self.log.info(f"Status Description: {status_desc}, Pipeline ID: {pipe_id}")
             self._log_logging_string(status['logging_string'])
 
             if status_desc not in self.END_STATUSES:
-                # Adicione informações de diagnóstico aqui, se necessário
-                # self.log.info('Sleeping 5 seconds before ask again')
+                self.log.info(f"Waiting for 5 seconds before rechecking status")
                 time.sleep(5)
 
         # Adiciona logs adicionais para diagnóstico
         if 'error_desc' in status and status['error_desc']:
             self.log.error(f"Error description: {status['error_desc']}")
-            self.log.error(self.LOG_TEMPLATE, status['error_desc'], self.pipeline, pipe_id)
+            self.log.error(f"Detailed status: {status}")
 
         if status_desc in self.ERROR_STATUSES:
             self.log.error(f"Final status: {status_desc}")
-            self.log.error(self.LOG_TEMPLATE, status_desc, self.pipeline, pipe_id)
+            self.log.error(f"Detailed status: {status}")
             raise AirflowException(f"Pipeline failed with status: {status_desc}")
