@@ -58,7 +58,7 @@ class XMLBuilder:
         self.project_variables = project_data['config']['variables']
 
         if task_params is None:
-            self.task_params = []
+            self.task_params = {}
         else:
             self.task_params = task_params
 
@@ -98,13 +98,26 @@ class XMLBuilder:
         tree_root = tree.getroot()
         parameters = tree_root.findall('parameters')
         root = Element('parameters')
-        for parameter in parameters[0]:
-            new_param = Element('parameter')
-            new_param.append(self.__generate_element('name',parameter[0].text))
-            new_param.append(self.__generate_element('value',parameter[1].text))
-            root.append(new_param)
-        return root
+        task_param_names = set(self.task_params.keys())
 
+        # Add existing parameters from the workflow
+        for parameter in parameters[0]:
+            param_name = parameter[0].text
+            
+            if param_name not in task_param_names:
+                new_param = Element('parameter')
+                new_param.append(self.__generate_element('name', parameter[0].text))
+                new_param.append(self.__generate_element('value', parameter[1].text))
+                root.append(new_param)
+        
+        # Add task parameters
+        for parameter in self.task_params:
+            new_parameter = Element('parameter')
+            new_parameter.append(self.__generate_element('name', parameter))
+            new_parameter.append(self.__generate_element('value',
+                self.task_params[parameter]))
+            root.append(new_parameter)
+        return root
 
     def get_pipeline_xml(self, pipeline_name, pipeline_config) -> bytes:
         pipeline_path = f'{self.project_path}/{pipeline_name}'
@@ -133,11 +146,25 @@ class XMLBuilder:
         tree_root = tree.getroot()
         parameters = tree_root[0].findall('parameters')
         root = Element('parameters')
+        task_param_names = set(self.task_params.keys())
+
+        # Add existing parameters from the pipeline
         for parameter in parameters[0]:
-            new_param = Element('parameter')
-            new_param.append(self.__generate_element('name',parameter[0].text))
-            new_param.append(self.__generate_element('value',parameter[1].text))
-            root.append(new_param)
+            param_name = parameter[0].text
+            
+            if param_name not in task_param_names:
+                new_param = Element('parameter')
+                new_param.append(self.__generate_element('name', parameter[0].text))
+                new_param.append(self.__generate_element('value', parameter[1].text))
+                root.append(new_param)
+        
+        # Add task parameters
+        for parameter in self.task_params:
+            new_parameter = Element('parameter')
+            new_parameter.append(self.__generate_element('name', parameter))
+            new_parameter.append(self.__generate_element('value',
+                self.task_params[parameter]))
+            root.append(new_parameter)
         return root
 
     def __get_variables(self, pipeline_config = None) -> Element:
