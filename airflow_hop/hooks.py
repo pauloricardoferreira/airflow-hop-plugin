@@ -12,8 +12,18 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+import airflow
+
+AIRFLOW_VERSION = tuple(map(int, airflow.__version__.split('.')[:2]))
+
+if AIRFLOW_VERSION < (3, 0):
+    from airflow.hooks.base import BaseHook
+else:
+    from airflow.sdk.bases.hook import BaseHook
+
 from airflow.exceptions import AirflowException
-from airflow.hooks.base import BaseHook
+
 from bs4 import BeautifulSoup
 
 import requests
