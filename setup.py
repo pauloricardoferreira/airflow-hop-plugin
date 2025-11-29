@@ -17,7 +17,6 @@
 
 from setuptools import find_packages, setup
 
-
 from os import path
 this_directory = path.abspath(path.dirname(__file__))
 with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
@@ -25,7 +24,7 @@ with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name='airflow-hop-plugin',
-    version='0.1.0b50',
+    version='0.1.0b51',
     license='Apache 2.0',
     author='Damavis',
     author_email='info@damavis.com',
