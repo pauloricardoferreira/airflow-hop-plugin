@@ -90,8 +90,32 @@ class XMLBuilder:
         root = Element('workflow_execution_configuration')
         root.append(self.__get_workflow_parameters(workflow_path))
         root.append(self.__get_variables())
-        root.append(self.__generate_element('run_configuration','local'))
+        # Extrai run_configuration da primeira action de pipeline no workflow
+        run_config = self.__extract_run_configuration_from_workflow(workflow_path)
+        root.append(self.__generate_element('run_configuration', run_config))
         return root
+
+    def __extract_run_configuration_from_workflow(self, workflow_path) -> str:
+        """
+        Extrai a run_configuration da primeira action de pipeline encontrada no workflow.
+        Se não encontrar, retorna 'local' como fallback.
+        """
+        try:
+            tree = ElementTree.parse(workflow_path)
+            tree_root = tree.getroot()
+            
+            # Procura por actions do tipo PIPELINE
+            for action in tree_root.findall('.//action'):
+                action_type = action.find('type')
+                if action_type is not None and action_type.text == 'PIPELINE':
+                    run_config = action.find('run_configuration')
+                    if run_config is not None and run_config.text:
+                        return run_config.text
+            
+            # Fallback para 'local' se não encontrar nenhuma configuração
+            return 'local'
+        except Exception:
+            return 'local'
 
     def __get_workflow_parameters(self, workflow_path):
         tree = ElementTree.parse(workflow_path)
@@ -138,7 +162,8 @@ class XMLBuilder:
         root = Element('pipeline_execution_configuration')
         root.append(self.__get_pipe_parameters(pipeline_file))
         root.append(self.__get_variables(pipeline_config))
-        root.append(self.__generate_element('run_configuration','local'))
+        # Usa pipeline_config passado como parâmetro ao invés de 'local' hardcoded
+        root.append(self.__generate_element('run_configuration', pipeline_config))
         return root
 
     def __get_pipe_parameters(self, pipeline_file) -> Element:
