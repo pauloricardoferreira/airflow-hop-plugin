@@ -39,8 +39,10 @@ class XMLBuilder:
                 environment_path,
                 environment_name,
                 hop_config_path,
-                task_params):
+                task_params,
+                run_configuration):
 
+        self.run_configuration = run_configuration
         self.project_path = project_path
 
         with open(f'{hop_config_path}/hop-config.json', encoding='utf-8') as file:
@@ -90,7 +92,7 @@ class XMLBuilder:
         root = Element('workflow_execution_configuration')
         root.append(self.__get_workflow_parameters(workflow_path))
         root.append(self.__get_variables())
-        root.append(self.__generate_element('run_configuration','local'))
+        root.append(self.__generate_element('run_configuration',self.run_configuration))
         return root
 
     def __get_workflow_parameters(self, workflow_path):
@@ -138,7 +140,7 @@ class XMLBuilder:
         root = Element('pipeline_execution_configuration')
         root.append(self.__get_pipe_parameters(pipeline_file))
         root.append(self.__get_variables(pipeline_config))
-        root.append(self.__generate_element('run_configuration','local'))
+        root.append(self.__generate_element('run_configuration',self.run_configuration))
         return root
 
     def __get_pipe_parameters(self, pipeline_file) -> Element:
