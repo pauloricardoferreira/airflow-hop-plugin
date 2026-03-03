@@ -62,7 +62,8 @@ class HopHook(BaseHook):
                 environment_name,
                 environment_path,
                 hop_config_path,
-                log_level):
+                log_level,
+                run_configuration):
             self.host = host
             self.port = port
             self.username = username
@@ -73,6 +74,7 @@ class HopHook(BaseHook):
             self.environment_name = environment_name
             self.hop_config_path = hop_config_path
             self.log_level = log_level
+            self.run_configuration = run_configuration
 
         def __get_url(self, endpoint):
             return f'http://{self.host}:{self.port}{endpoint}'
@@ -87,7 +89,8 @@ class HopHook(BaseHook):
                 self.environment_path,
                 self.environment_name,
                 self.hop_config_path,
-                task_params)
+                task_params,
+                self.run_configuration)
             data = xml_builder.get_pipeline_xml(pipe_name, pipe_config)
             parameters = {'xml': 'Y'}
             response = requests.post(url=self.__get_url(self.REGISTER_PIPELINE),
@@ -254,7 +257,8 @@ class HopHook(BaseHook):
             environment_name,
             hop_config_path,
             conn_id='hop_default',
-            log_level='Basic'):
+            log_level='Basic',
+            run_configuration='local'):
         """Hop Hook constructor to initialize the object."""
 
         self.conn_id = conn_id
@@ -268,6 +272,7 @@ class HopHook(BaseHook):
         self.hop_config_path = hop_config_path
         self.log_level = log_level
         self.hop_client = None
+        self.run_configuration = run_configuration
 
     def get_conn(self) -> HopServerConnection:
         if self.hop_client:
@@ -283,5 +288,6 @@ class HopHook(BaseHook):
             environment_name=self.environment_name,
             environment_path=self.environment_path,
             hop_config_path=self.hop_config_path,
-            log_level=self.log_level)
+            log_level=self.log_level,
+            run_configuration=self.run_configuration)
         return self.hop_client
