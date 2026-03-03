@@ -62,6 +62,7 @@ class HopWorkflowOperator(HopBaseOperator):
                  *args,
                  hop_params=None,
                  hop_conn_id='hop_default',
+                 run_configuration='local',
                  **kwargs):
         super().__init__(*args, **kwargs)
         self.workflow = workflow
@@ -73,6 +74,7 @@ class HopWorkflowOperator(HopBaseOperator):
         self.log_level = log_level
         self.task_params = hop_params
         self.hop_conn_id = hop_conn_id
+        self.run_configuration = run_configuration
 
     def __get_hop_client(self):
         return HopHook(
@@ -82,32 +84,44 @@ class HopWorkflowOperator(HopBaseOperator):
                 self.environment_name,
                 self.hop_config_path,
                 self.hop_conn_id,
-                self.log_level).get_conn()
+                self.log_level,
+                self.run_configuration).get_conn()
 
     def execute(self, context: Context) -> Any: # pylint: disable=unused-argument
+        
         conn = self.__get_hop_client()
         register_rs = conn.register_workflow(self.workflow, self.task_params)
         message = register_rs['webresult']['message']
         work_id = register_rs['webresult']['id']
-        self.log.info(f'{self.workflow}: {message}')
+        # self.log.info(f'{self.workflow}: {message}')
+        self.log.info(f'{self.workflow}')
 
         start_rs = conn.start_workflow(self.workflow, work_id)
         result = start_rs['webresult']['result']
-        self.log.info(f'{self.workflow}: Started {result}')
-
+        # self.log.info(f'{self.workflow}: Started {result}')
+        self.log.info(f'Started {result}')
+        
+        self.log.info("pt-br: O status final da execução será exibido nos logs ao término da task.")
+        self.log.info("en-us: Execution result logs (success or failure) will be displayed at the end of the run.")
+        
         work_status_rs = None
         status_desc = None
+        
         while not work_status_rs or status_desc not in self.END_STATUSES:
             work_status_rs = conn.workflow_status(self.workflow, work_id)
 
             status = work_status_rs['workflow-status']
             status_desc = status['status_desc']
+            # self.log.info(self.LOG_TEMPLATE, status_desc, self.workflow, work_id)
+            # self._log_logging_string(status['logging_string'])
+
+            # if status_desc not in self.END_STATUSES:
+            #     self.log.info('Sleeping 5 seconds before ask again')
+            #     time.sleep(5)
+            
+        if status_desc in self.FINISHED_STATUSES:
             self.log.info(self.LOG_TEMPLATE, status_desc, self.workflow, work_id)
             self._log_logging_string(status['logging_string'])
-
-            if status_desc not in self.END_STATUSES:
-                self.log.info('Sleeping 5 seconds before ask again')
-                time.sleep(5)
 
         if 'error_desc' in status and status['error_desc']:
             self.log.error(self.LOG_TEMPLATE, status['error_desc'], self.workflow, work_id)
@@ -115,6 +129,28 @@ class HopWorkflowOperator(HopBaseOperator):
         if status_desc in self.ERROR_STATUSES:
             self.log.error(self.LOG_TEMPLATE, status_desc, self.workflow, work_id)
             raise AirflowException(status_desc)
+        
+        # Limpar ID após conclusão bem-sucedida
+        self.work_id = None
+        
+    def on_kill(self) -> None:
+        """Interrompe a execução remota no Hop Server quando a task é morta (timeout, clear, etc.)"""
+        if hasattr(self, 'work_id') and self.work_id:
+            self.log.warning(
+                f"Task interrompida - solicitando parada do workflow '{self.workflow}' (ID: {self.work_id}) no Hop Server"
+            )
+            try:
+                conn = self.__get_hop_client()
+                stop_rs = conn.stop_workflow(self.workflow, self.work_id)
+                self.log.info(
+                    f"Parada solicitada com sucesso: {stop_rs['webresult'].get('message', 'OK')}"
+                )
+            except Exception as e:
+                self.log.error(
+                    f"Falha ao parar workflow '{self.workflow}' (ID {self.work_id}) no Hop Server: {str(e)}"
+                )
+            finally:
+                self.work_id = None  # Limpar referência
 
 
 class HopPipelineOperator(HopBaseOperator):
@@ -134,6 +170,7 @@ class HopPipelineOperator(HopBaseOperator):
                  pipe_config,
                  hop_params=None,
                  hop_conn_id='hop_default',
+                 run_configuration='local',
                  **kwargs):
         super().__init__(*args, **kwargs)
         self.pipeline = pipeline
@@ -146,6 +183,7 @@ class HopPipelineOperator(HopBaseOperator):
         self.environment_name = environment_name
         self.hop_config_path = hop_config_path
         self.pipe_config = pipe_config
+        self.run_configuration = run_configuration
 
     def __get_hop_client(self):
         return HopHook(
@@ -155,41 +193,76 @@ class HopPipelineOperator(HopBaseOperator):
                 self.environment_name,
                 self.hop_config_path,
                 self.hop_conn_id,
-                self.log_level).get_conn()
+                self.log_level,
+                self.run_configuration).get_conn()
 
     def execute(self, context: Context) -> Any: # pylint: disable=unused-argument
+        
         conn = self.__get_hop_client()
-
         register_rs = conn.register_pipeline(self.pipeline, self.pipe_config, self.task_params)
         message = register_rs['webresult']['message']
         pipe_id = register_rs['webresult']['id']
-        self.log.info(f'{self.pipeline}: {message}')
+        # self.log.info(f'{self.pipeline}: {message}')
+        self.log.info(f'{self.pipeline}')
 
         prepare_exec_rs = conn.prepare_pipeline_exec(self.pipeline, pipe_id)
         result = prepare_exec_rs['webresult']['result']
-        self.log.info(f'{self.pipeline}: Prepared {result}')
+        # self.log.info(f'{self.pipeline}: Prepare {result}')
+        self.log.info(f'Prepare {result}')
 
         start_exec_rs = conn.start_pipeline_execution(self.pipeline, pipe_id)
         result = start_exec_rs['webresult']['result']
-        self.log.info(f'{self.pipeline}: Started {result}')
+        # self.log.info(f'{self.pipeline}: Started {result}')        
+        self.log.info(f'Started {result}')
+
+        self.log.info("pt-br: O status final da execução será exibido nos logs ao término da task.")
+        self.log.info("en-us: Execution result logs (success or failure) will be displayed at the end of the run.")
+
 
         pipe_status_rs = None
         status_desc = None
+        
         while not pipe_status_rs or status_desc not in self.END_STATUSES:
             pipe_status_rs = conn.pipeline_status(self.pipeline, pipe_id)
 
             status = pipe_status_rs['pipeline-status']
             status_desc = status['status_desc']
+            # self.log.info(self.LOG_TEMPLATE, status_desc, self.pipeline, pipe_id)
+            # self._log_logging_string(status['logging_string'])
+
+            # if status_desc not in self.END_STATUSES:
+            #     self.log.info('Sleeping 5 seconds before ask again')
+            #     time.sleep(5)
+
+        if status_desc in self.FINISHED_STATUSES:
             self.log.info(self.LOG_TEMPLATE, status_desc, self.pipeline, pipe_id)
             self._log_logging_string(status['logging_string'])
-
-            if status_desc not in self.END_STATUSES:
-                self.log.info('Sleeping 5 seconds before ask again')
-                time.sleep(5)
-
+            
         if 'error_desc' in status and status['error_desc']:
             self.log.error(self.LOG_TEMPLATE, status['error_desc'], self.pipeline, pipe_id)
 
         if status_desc in self.ERROR_STATUSES:
             self.log.error(self.LOG_TEMPLATE, status_desc, self.pipeline, pipe_id)
             raise AirflowException(status_desc)
+        
+        # Limpar ID após conclusão bem-sucedida
+        self.pipe_id = None
+        
+    def on_kill(self) -> None:
+        """Interrompe a execução remota no Hop Server quando a task é morta (timeout, clear, etc.)"""
+        if hasattr(self, 'pipe_id') and self.pipe_id:
+            self.log.warning(
+                f"Task interrompida - solicitando parada do pipeline '{self.pipeline}' (ID: {self.pipe_id}) no Hop Server"
+            )
+            try:
+                conn = self.__get_hop_client()
+                stop_rs = conn.stop_pipeline_execution(self.pipeline, self.pipe_id)
+                self.log.info(
+                    f"Parada solicitada com sucesso: {stop_rs['webresult'].get('message', 'OK')}"
+                )
+            except Exception as e:
+                self.log.error(
+                    f"Falha ao parar pipeline '{self.pipeline}' (ID {self.pipe_id}) no Hop Server: {str(e)}"
+                )
+            finally:
+                self.pipe_id = None  # Limpar referência
