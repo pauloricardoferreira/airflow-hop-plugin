@@ -185,20 +185,6 @@ class XMLBuilder:
             new_variable.append(self.__generate_element('value', variable['value']))
             root.append(new_variable)
 
-        if pipeline_config is not None:
-            with open(self.metastore_file, encoding='utf-8') as f:
-                data = json.load(f)
-
-            run_config = next(item for item in data['pipeline-run-configuration']
-                if item['name'] == pipeline_config)
-
-            pipeline_vars = run_config['configurationVariables']
-            for variable in pipeline_vars:
-                new_variable = Element('variable')
-                new_variable.append(self.__generate_element('name',variable['name']))
-                new_variable.append(self.__generate_element('value',variable['value']))
-                root.append(new_variable)
-
         for variable in self.project_variables:
             new_variable = Element('variable')
             new_variable.append(self.__generate_element('name',variable['name']))
