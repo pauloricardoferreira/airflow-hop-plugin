@@ -179,7 +179,8 @@ class HopHook(BaseHook):
                 self.environment_path,
                 self.environment_name,
                 self.hop_config_path,
-                task_params)
+                task_params,
+                self.run_configuration)
             data = xml_builder.get_workflow_xml(workflow_name)
             parameters = {'xml': 'Y'}
             response = requests.post(url=self.__get_url(self.REGISTER_WORKFLOW),
