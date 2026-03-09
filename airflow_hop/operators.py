@@ -167,7 +167,6 @@ class HopPipelineOperator(HopBaseOperator):
                  environment_name,
                  hop_config_path,
                  *args,
-                 pipe_config,
                  hop_params=None,
                  hop_conn_id='hop_default',
                  run_configuration='local',
@@ -182,7 +181,6 @@ class HopPipelineOperator(HopBaseOperator):
         self.environment_path = environment_path
         self.environment_name = environment_name
         self.hop_config_path = hop_config_path
-        self.pipe_config = pipe_config
         self.run_configuration = run_configuration
 
     def __get_hop_client(self):
@@ -199,7 +197,7 @@ class HopPipelineOperator(HopBaseOperator):
     def execute(self, context: Context) -> Any: # pylint: disable=unused-argument
         
         conn = self.__get_hop_client()
-        register_rs = conn.register_pipeline(self.pipeline, self.pipe_config, self.task_params)
+        register_rs = conn.register_pipeline(self.pipeline, self.task_params)
         message = register_rs['webresult']['message']
         pipe_id = register_rs['webresult']['id']
         # self.log.info(f'{self.pipeline}: {message}')
