@@ -82,7 +82,7 @@ class HopHook(BaseHook):
         def __get_auth(self):
             return HTTPBasicAuth(self.username, self.password)
 
-        def register_pipeline(self, pipe_name, pipe_config, task_params=None):
+        def register_pipeline(self, pipe_name, task_params=None):
             xml_builder = XMLBuilder(
                 self.project_path,
                 self.project_name,
@@ -91,7 +91,7 @@ class HopHook(BaseHook):
                 self.hop_config_path,
                 task_params,
                 self.run_configuration)
-            data = xml_builder.get_pipeline_xml(pipe_name, pipe_config)
+            data = xml_builder.get_pipeline_xml(pipe_name)
             parameters = {'xml': 'Y'}
             response = requests.post(url=self.__get_url(self.REGISTER_PIPELINE),
                                      params=parameters, auth=self.__get_auth(),
