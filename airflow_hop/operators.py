@@ -119,6 +119,11 @@ class HopWorkflowOperator(HopBaseOperator):
             #     self.log.info('Sleeping 5 seconds before ask again')
             #     time.sleep(5)
             
+        work_status_rs = conn.workflow_status(self.workflow, work_id)
+
+        status = work_status_rs['workflow-status']
+        status_desc = status['status_desc']
+            
         if status_desc in self.FINISHED_STATUSES:
             self.log.info(self.LOG_TEMPLATE, status_desc, self.workflow, work_id)
             self._log_logging_string(status['logging_string'])
@@ -231,6 +236,11 @@ class HopPipelineOperator(HopBaseOperator):
             # if status_desc not in self.END_STATUSES:
             #     self.log.info('Sleeping 5 seconds before ask again')
             #     time.sleep(5)
+            
+        pipe_status_rs = conn.pipeline_status(self.pipeline, pipe_id)
+
+        status = pipe_status_rs['pipeline-status']
+        status_desc = status['status_desc']
 
         if status_desc in self.FINISHED_STATUSES:
             self.log.info(self.LOG_TEMPLATE, status_desc, self.pipeline, pipe_id)
