@@ -121,25 +121,22 @@ class XMLBuilder:
             root.append(new_parameter)
         return root
 
-    def get_pipeline_xml(self, pipeline_name, pipeline_config) -> bytes:
+    def get_pipeline_xml(self, pipeline_name) -> bytes:
         pipeline_path = f'{self.project_path}/{pipeline_name}'
         root = Element('pipeline_configuration')
         try:
             pipeline = ElementTree.parse(pipeline_path)
             root.append(pipeline.getroot())
-            root.append(self.__get_pipeline_execution_config(pipeline_config, pipeline_path))
+            root.append(self.__get_pipeline_execution_config(pipeline_path))
             root.append(self.__generate_element('metastore_json', self.__generate_metastore()))
             return ElementTree.tostring(root, encoding='utf-8')
         except FileNotFoundError as error:
             raise AirflowException(f'ERROR: pipeline {pipeline_path} not found') from error
-        except StopIteration as error:
-            raise AirflowException(f'ERROR: pipeline configuration {pipeline_config}'\
-                ' not found') from error
 
-    def __get_pipeline_execution_config(self, pipeline_config, pipeline_file) -> Element:
+    def __get_pipeline_execution_config(self, pipeline_file) -> Element:
         root = Element('pipeline_execution_configuration')
         root.append(self.__get_pipe_parameters(pipeline_file))
-        root.append(self.__get_variables(pipeline_config))
+        root.append(self.__get_variables())
         root.append(self.__generate_element('run_configuration',self.run_configuration))
         return root
 
@@ -169,7 +166,7 @@ class XMLBuilder:
             root.append(new_parameter)
         return root
 
-    def __get_variables(self, pipeline_config = None) -> Element:
+    def __get_variables(self) -> Element:
         root = Element('variables')
         
         for parameter in self.task_params:
