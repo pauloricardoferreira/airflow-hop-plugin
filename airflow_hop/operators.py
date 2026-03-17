@@ -112,6 +112,7 @@ class HopWorkflowOperator(HopBaseOperator):
 
             status = work_status_rs['workflow-status']
             status_desc = status['status_desc']
+            time.sleep(5)
             # self.log.info(self.LOG_TEMPLATE, status_desc, self.workflow, work_id)
             # self._log_logging_string(status['logging_string'])
 
@@ -230,6 +231,7 @@ class HopPipelineOperator(HopBaseOperator):
 
             status = pipe_status_rs['pipeline-status']
             status_desc = status['status_desc']
+            time.sleep(5)
             # self.log.info(self.LOG_TEMPLATE, status_desc, self.pipeline, pipe_id)
             # self._log_logging_string(status['logging_string'])
 
