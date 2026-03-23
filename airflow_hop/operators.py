@@ -131,7 +131,6 @@ class HopWorkflowOperator(HopBaseOperator):
 
         if 'error_desc' in status and status['error_desc']:
             self.log.error(self.LOG_TEMPLATE, status['error_desc'], self.workflow, work_id)
-            self._log_logging_string(status['logging_string'])
 
         if status_desc in self.ERROR_STATUSES:
             self.log.error(self.LOG_TEMPLATE, status_desc, self.workflow, work_id)
@@ -251,7 +250,6 @@ class HopPipelineOperator(HopBaseOperator):
             self._log_logging_string(status['logging_string'])
             
         if 'error_desc' in status and status['error_desc']:
-            self._log_logging_string(status['logging_string'])
             self.log.error(self.LOG_TEMPLATE, status['error_desc'], self.pipeline, pipe_id)
 
         if status_desc in self.ERROR_STATUSES:
