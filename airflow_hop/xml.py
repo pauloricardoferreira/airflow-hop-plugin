@@ -70,10 +70,24 @@ class XMLBuilder:
         env = next(item for item in config_data['projectsConfig']['lifecycleEnvironments']
             if item['name'] == environment_name)
         for env_file in env['configurationFiles']:
-            env_file = env_file.split('/')[-1]
-            with open(f'{environment_path}/{env_file}', encoding='utf-8') as file:
-                env_data = json.load(file)
-            self.environment_vars = self.environment_vars + env_data['variables']
+            # Extrai apenas o nome do arquivo
+            file_name = env_file.split('/')[-1]
+            file_path = f'{environment_path}/{file_name}'
+            
+            try:
+                with open(file_path, encoding='utf-8') as file:
+                    env_data = json.load(file)
+                
+                # Concatena as variáveis se o arquivo for lido com sucesso
+                self.environment_vars = self.environment_vars + env_data['variables']
+                
+            except FileNotFoundError:
+                # Usa o logger do Airflow para registrar o aviso (não falha a task)
+                self.log.warning(f"Arquivo de configuração não encontrado: {file_path}")
+            
+            except json.JSONDecodeError:
+                # Bônus: Caso o arquivo exista mas o JSON seja inválido
+                self.log.error(f"Erro ao parsear JSON no arquivo: {file_path}")
 
     def get_workflow_xml(self, workflow_name) -> bytes:
         workflow_path = f'{self.project_path}/{workflow_name}'
