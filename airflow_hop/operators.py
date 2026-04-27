@@ -20,7 +20,17 @@ from typing import Any
 from airflow.exceptions import AirflowException
 
 from airflow.models import BaseOperator
-from airflow.utils.context import Context
+
+import airflow
+
+AIRFLOW_VERSION = tuple(map(int, airflow.__version__.split('.')[:2]))
+
+if AIRFLOW_VERSION < (3, 0):
+    from airflow.utils.context import Context
+else:
+    from airflow.sdk.definitions.context import Context
+
+
 from airflow_hop.hooks import HopHook
 
 class HopBaseOperator(BaseOperator):
